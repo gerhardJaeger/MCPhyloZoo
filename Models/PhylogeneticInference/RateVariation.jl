@@ -33,8 +33,8 @@ model = Model(
 )
 ##
 
-scheme = [#PNUTS(:tree, target=0.7, targetNNI=0.5),
-    Slice(:tree, 0.1),Slice(:tree, 1.0),Slice(:tree, 10.),
+scheme = [PNUTS(:tree, target=0.7, targetNNI=0.5),
+    #Slice(:tree, 0.1),Slice(:tree, 1.0),Slice(:tree, 10.),
     RWM(:tree, [:NNI, :SPR]),
     SliceSimplex(:eq_freq),
     Slice(:a, 1.0)
@@ -64,3 +64,9 @@ sim = mcmc(
     trees=true,
     verbose=false
 )
+
+gelmandiag(sim)
+
+plot(sim)
+
+describe(sim)
