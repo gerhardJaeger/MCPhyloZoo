@@ -28,13 +28,13 @@ model = Model(
         () -> TreeDistribution(CompoundDirichlet(1.0, 1.0, 0.100, 1.0)),
         true
     ),
-    rates=Logical(1, (a) -> discrete_gamma_rates(a, a, 2)),
+    rates=Logical(1, (a) -> discrete_gamma_rates(a, a, 4)),
     a=Stochastic(() -> Exponential(), true)
 )
 ##
 
 scheme = [#PNUTS(:tree, target=0.7, targetNNI=0.5),
-    Slice(:tree, 1.0),
+    Slice(:tree, 0.1),Slice(:tree, 1.0),Slice(:tree, 10.),
     RWM(:tree, [:NNI, :SPR]),
     SliceSimplex(:eq_freq),
     Slice(:a, 1.0)
@@ -48,23 +48,11 @@ inits = [
         :eq_freq => rand(Dirichlet(2, 1)),
         :data => data_dictionary[:data],
         :a => rand()
-    ),
+    ) for c in 1:2
 ];
 
 ##
-# a = 0.810699
-# rates = discrete_gamma_rates(a,a,2)
-# eq_freq = inits[1][:eq_freq]
 
-##
-
-# d = PhyloDist(tree, inits[1][:eq_freq], [1.0], rates, Restriction)
-
-# logpdf(d, data)
-
-
-
-##
 sim = mcmc(
     model,
     data_dictionary,
@@ -72,7 +60,7 @@ sim = mcmc(
     5000,
     burnin=2500,
     thin=5,
-    chains=1,
+    chains=2,
     trees=true,
     verbose=false
 )
