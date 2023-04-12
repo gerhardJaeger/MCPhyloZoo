@@ -5,7 +5,7 @@ using Random;
 Random.seed!(1234);
 
 ##
-tree, data = make_tree_with_data("Example.nex");
+tree, data = make_tree_with_data("dunnielex.nex");
 
 data_dictionary = Dict{Symbol, Any}(
   :data => data
@@ -57,13 +57,17 @@ sim = mcmc(
     model,
     data_dictionary,
     inits,
-    5000,
-    burnin=2500,
-    thin=5,
+    500,
+    burnin=250,
+    thin=1,
     chains=2,
     trees=true,
-    verbose=false
+    verbose=true
 )
+
+##
+sim = mcmc(sim, 300)
+
 
 gelmandiag(sim)
 
