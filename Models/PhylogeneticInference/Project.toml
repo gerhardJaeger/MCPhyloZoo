@@ -1,0 +1,3 @@
+[deps]
+MCPhylo = "af0ac7d2-842d-415f-bd76-8183c117c674"
+MCPhyloTree = "e53f0ae0-6895-45b6-9907-1ecda2d8723d"
