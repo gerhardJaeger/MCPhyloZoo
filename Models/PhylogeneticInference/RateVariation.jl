@@ -1,6 +1,5 @@
 
 using MCPhylo
-using Revise
 using Random;
 Random.seed!(1234);
 
@@ -34,7 +33,7 @@ model = Model(
 ##
 
 scheme = [PNUTS(:tree, target=0.7, targetNNI=0.5),
-    #Slice(:tree, 0.1),Slice(:tree, 1.0),Slice(:tree, 10.),
+    Slice(:tree, 0.1),Slice(:tree, 1.0),Slice(:tree, 10.),
     RWM(:tree, [:NNI, :SPR]),
     SliceSimplex(:eq_freq),
     Slice(:a, 1.0)
@@ -57,20 +56,27 @@ sim = mcmc(
     model,
     data_dictionary,
     inits,
-    500,
-    burnin=250,
-    thin=1,
+    1000,
+    burnin=0,
+    thin=10,
     chains=2,
     trees=true,
     verbose=true
 )
 
 ##
-sim = mcmc(sim, 300)
+
+sim = mcmc(sim, 6000)
+
+##
 
 
-gelmandiag(sim)
+##
 
-plot(sim)
+#gelmandiag(sim)
 
 describe(sim)
+
+# open("dunnielex.tree", "w") do io
+#     write(io, join(vec(sim[7001:end,:,:].trees), "\n"))
+# end
